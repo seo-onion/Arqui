@@ -1,24 +1,24 @@
-.global _start
+.bss
+	array: .space 160
 
-_start:
+.text
+	.global _start
+
+_start:	
 	
-	LDR R1, =array
-	MOV R2, #0 
-	
+	LDR R0, =array
+	MOV R1, #0
+
 	for:
+	CMP	R1, #40
+	BGT end
+	
+	STR R1, [R0, R1, LSL #2] @Guardo en memoria lo que está en R1 en la posición [R0 + R1], pero R1 es rotado hacia la izquierda 4 bites (Multiplicación 2²)
+	
+	ADD R1, R1, #1
+	B for
+	
+end:
+	SWI 0
 
-		CMP R2, #40
-		BGE endfor @Si es mayor o igual anda a endfor
-
-		ADD R2, R2, #1
-
-		STR R2, [R1, R2, LSL #2] // Guardamos R2 en R1 + R2*4
-		@str copia un valor de un registro a la memoria
-		ADD R2, R2, #1
-		B for
-	endfor:
-		SWI 0
-
-.data
-	array: 	2,4,345,4,3,
 	
